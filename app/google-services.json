@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "217103019519",
+    "firebase_url": "https://casaflow-a0f4c-default-rtdb.firebaseio.com",
+    "project_id": "casaflow-a0f4c",
+    "storage_bucket": "casaflow-a0f4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217103019519:android:42e2197c6010a56fb08bca",
+        "android_client_info": {
+          "package_name": "com.marcosviniciusferreira.casaflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217103019519-1sui3e97b935j8bc782cd4c1hgjklj7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marcosviniciusferreira.casaflow",
+            "certificate_hash": "645e557ff7472ab7d059f2adc47d58ef42f2d17a"
+          }
+        },
+        {
+          "client_id": "217103019519-1ke0tvho1m4dih4haaar5tav6i415hnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxW3nVEmUbF6ZJAfp9aOzs9PBOnebrsJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217103019519-1ke0tvho1m4dih4haaar5tav6i415hnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
