@@ -1,6 +1,7 @@
 package com.marcosviniciusferreira.casaflow.model;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 
 public class User {
@@ -10,8 +11,8 @@ public class User {
     private String email;
     private String password;
 
-    private Double totalExpenses;
-    private Double totalIncome;
+    private Double totalExpenses = 0.0;
+    private Double totalIncome = 0.0;
 
     public User() {
     }
@@ -25,10 +26,9 @@ public class User {
     public void save() {
         DatabaseReference database = FirebaseConfig.getDatabase();
 
-        User toBeSaved = new User(this.id, this.name, this.email);
         database.child("users")
                 .child(this.id)
-                .setValue(toBeSaved);
+                .setValue(this);
     }
 
     public String getId() {
@@ -55,6 +55,7 @@ public class User {
         this.email = email;
     }
 
+    @Exclude
     public String getPassword() {
         return password;
     }
