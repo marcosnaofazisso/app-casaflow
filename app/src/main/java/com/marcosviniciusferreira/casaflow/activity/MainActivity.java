@@ -21,10 +21,19 @@ import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
 import com.marcosviniciusferreira.casaflow.model.User;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView welcomeName;
     private TextView emailInfo;
+    private TextView todayDate;
+
+    private TextView totalExpenses;
+    private TextView totalIncome;
 
     private FirebaseAuth auth = FirebaseConfig.getFirebaseAuth();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -40,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 //        String json = gson.toJson(userName);
 
         initializeComponents();
+
+        getCurrentTime();
+
         String userEmail = auth.getCurrentUser().getEmail();
         String userId = Base64Custom.codeBase64(userEmail);
 
@@ -52,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
                 user = snapshot.getValue(User.class);
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String json = gson.toJson(user);
-                Log.i("USER =======>>>>>", json);
-
 
                 welcomeName.setText("Olá, " + user.getName());
+                totalExpenses.setText("Total de Despesas: R$ " + user.getTotalExpenses());
+                totalIncome.setText("Total de Receitas: R$ " + user.getTotalIncome());
 
             }
 
@@ -65,13 +77,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        emailInfo.setText("Olá, " + userEmail);
+        emailInfo.setText(userEmail);
 
+    }
+
+    private void getCurrentTime() {
+        Date currentDate = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String formattedDate = df.format(currentDate);
+        todayDate.setText("Hoje é " + formattedDate);
     }
 
     private void initializeComponents() {
 
         welcomeName = findViewById(R.id.textMainWelcome);
         emailInfo = findViewById(R.id.textMainEmail);
+        todayDate = findViewById(R.id.textTodayDate);
+
+        totalExpenses = findViewById(R.id.textTotalExpenses);
+        totalIncome = findViewById(R.id.textTotalIncome);
     }
 }

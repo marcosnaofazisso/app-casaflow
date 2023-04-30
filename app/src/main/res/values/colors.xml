@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="casaflow">#FCFCFC</color>
+    <color name="green_check">#00D39E</color>
+    <color name="red_uncheck">#FF706A</color>
 </resources>
