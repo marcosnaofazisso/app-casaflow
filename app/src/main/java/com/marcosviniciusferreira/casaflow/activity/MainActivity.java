@@ -1,8 +1,7 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,14 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.marcosviniciusferreira.casaflow.R;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
@@ -64,12 +60,13 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference userRef = database.child("users").child(userId);
 
         userRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 user = snapshot.getValue(User.class);
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String json = gson.toJson(user);
+//                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//                String json = gson.toJson(user);
 
                 welcomeName.setText("Olá, " + user.getName());
                 totalExpenses.setText("Total de Despesas: R$ " + user.getTotalExpenses());
@@ -83,19 +80,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        incomeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        incomeButton.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show());
 
-        expenseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        expenseButton.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show());
 
 
         emailInfo.setText(userEmail);
