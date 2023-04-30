@@ -2,11 +2,14 @@ package com.marcosviniciusferreira.casaflow.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView totalExpenses;
     private TextView totalIncome;
+
+    private FloatingActionButton incomeButton;
+    private FloatingActionButton expenseButton;
 
     private FirebaseAuth auth = FirebaseConfig.getFirebaseAuth();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -77,6 +83,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        incomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        expenseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         emailInfo.setText(userEmail);
 
     }
@@ -96,5 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
         totalExpenses = findViewById(R.id.textTotalExpenses);
         totalIncome = findViewById(R.id.textTotalIncome);
+
+        incomeButton = findViewById(R.id.fabAdd);
+        expenseButton = findViewById(R.id.fabRemove);
     }
 }
