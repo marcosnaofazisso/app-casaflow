@@ -103,6 +103,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean fieldsValidated() {
+        email = textEmail.getText().toString();
+        password = textPassword.getText().toString();
+
         if (!email.isEmpty() && !password.isEmpty()) return true;
         else {
             Toast.makeText(this, "Preencha os campos para realizar login", Toast.LENGTH_SHORT).show();
