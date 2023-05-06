@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private String email;
     private String password;
 
-    User user;
+    private User user;
     private FirebaseAuth auth;
 
 
