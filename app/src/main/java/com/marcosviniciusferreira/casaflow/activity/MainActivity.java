@@ -19,6 +19,7 @@ import com.marcosviniciusferreira.casaflow.R;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
 import com.marcosviniciusferreira.casaflow.model.User;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private User user;
 
+    private MaterialCalendarView calendarView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 //        String json = gson.toJson(userName);
 
         initializeComponents();
+        initializeCalendarSettings();
 
         getCurrentTime();
 
@@ -89,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void initializeCalendarSettings() {
+
+        CharSequence[] translatedMonths = {"Janeiro", "Fevereiro", "Março", "Abril",
+                "Maio", "Junho", "Julho", "Agosto",
+                "Setembro", "Outubro", "Novembro", "Dezembro"};
+        calendarView.setTitleMonths(translatedMonths);
+    }
+
     private void getCurrentTime() {
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -107,5 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         incomeButton = findViewById(R.id.fabAdd);
         expenseButton = findViewById(R.id.fabRemove);
+
+        calendarView = findViewById(R.id.calendarView);
     }
 }

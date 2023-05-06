@@ -43,4 +43,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.2.0'
 
     implementation 'com.google.code.gson:gson:2.10.1'
+
+    implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+
 }
