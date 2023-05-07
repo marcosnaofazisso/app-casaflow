@@ -9,13 +9,21 @@ public class Transaction {
 
     private String date;
     private String category;
-    private String description;
+    private String title;
     private String type;
     private double value;
 
     private String key;
 
     public Transaction() {
+    }
+
+    public Transaction(String date, String category, String title, String type, double value) {
+        this.date = date;
+        this.category = category;
+        this.title = title;
+        this.type = type;
+        this.value = value;
     }
 
     public void save() {
@@ -46,12 +54,12 @@ public class Transaction {
         this.category = category;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getType() {

@@ -9,6 +9,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,14 +20,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.marcosviniciusferreira.casaflow.R;
+import com.marcosviniciusferreira.casaflow.adapter.AdapterTransactions;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
+import com.marcosviniciusferreira.casaflow.model.Transaction;
 import com.marcosviniciusferreira.casaflow.model.User;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,12 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton incomeButton;
     private FloatingActionButton expenseButton;
+    private MaterialCalendarView calendarView;
 
     private FirebaseAuth auth = FirebaseConfig.getFirebaseAuth();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private User user;
 
-    private MaterialCalendarView calendarView;
+    private RecyclerView recyclerView;
+    private AdapterTransactions adapterTransactions;
+    private List<Transaction> transactions = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
         initializeComponents();
         initializeCalendarSettings();
+
+        adapterTransactions = new AdapterTransactions(transactions, this);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapterTransactions);
+        recyclerView.setHasFixedSize(true);
 
         getCurrentTime();
 
