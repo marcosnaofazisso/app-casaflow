@@ -15,11 +15,17 @@
         android:theme="@style/Theme.HomeFinances"
         tools:targetApi="31">
         <activity
-            android:name=".ExpensesActivity"
-            android:exported="false" />
+            android:name=".activity.ExpensesActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.LoginActivity"
+            android:theme="@style/Theme.Design.NoActionBar.ExpenseActivity"/>
         <activity
-            android:name=".IncomeActivity"
-            android:exported="false" />
+            android:name=".activity.IncomeActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.LoginActivity"
+            android:theme="@style/Theme.Design.NoActionBar.IncomeActivity"
+
+            />
         <activity
             android:name=".activity.RegisterActivity"
             android:exported="false"
