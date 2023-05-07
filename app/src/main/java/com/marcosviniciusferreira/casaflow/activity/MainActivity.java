@@ -1,6 +1,7 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,10 +85,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        incomeButton.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show());
+        incomeButton.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, IncomeActivity.class));
+        });
 
-        expenseButton.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Funcionalidade em construção!", Toast.LENGTH_SHORT).show());
-
+        expenseButton.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, ExpensesActivity.class));
+        });
 
         emailInfo.setText(userEmail);
 
