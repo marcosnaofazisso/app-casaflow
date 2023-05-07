@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +31,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private TextView welcomeName;
-    private TextView emailInfo;
-    private TextView todayDate;
-
-    private TextView totalExpenses;
-    private TextView totalIncome;
 
     private FloatingActionButton incomeButton;
     private FloatingActionButton expenseButton;
@@ -70,12 +66,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 user = snapshot.getValue(User.class);
-//                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//                String json = gson.toJson(user);
 
                 welcomeName.setText("Olá, " + user.getName());
-                totalExpenses.setText("Total de Despesas: R$ " + user.getTotalExpenses());
-                totalIncome.setText("Total de Receitas: R$ " + user.getTotalIncome());
 
             }
 
@@ -93,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, ExpensesActivity.class));
         });
 
-        emailInfo.setText(userEmail);
-
     }
 
     private void initializeCalendarSettings() {
@@ -109,21 +99,16 @@ public class MainActivity extends AppCompatActivity {
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String formattedDate = df.format(currentDate);
-        todayDate.setText("Hoje é " + formattedDate);
     }
 
     private void initializeComponents() {
 
         welcomeName = findViewById(R.id.textMainWelcome);
-        emailInfo = findViewById(R.id.textMainEmail);
-        todayDate = findViewById(R.id.textTodayDate);
-
-        totalExpenses = findViewById(R.id.textTotalExpenses);
-        totalIncome = findViewById(R.id.textTotalIncome);
 
         incomeButton = findViewById(R.id.fabAdd);
         expenseButton = findViewById(R.id.fabRemove);
 
         calendarView = findViewById(R.id.calendarView);
+
     }
 }

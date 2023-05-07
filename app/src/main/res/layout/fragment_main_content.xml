@@ -10,28 +10,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         android:background="@color/purple_200"
         android:gravity="center"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textGreetings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Loading..."
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <TextView
             android:id="@+id/textGeneralBalance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:text="R$ 0"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
 
