@@ -1,5 +1,6 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -10,10 +11,16 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.marcosviniciusferreira.casaflow.R;
+import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
+import com.marcosviniciusferreira.casaflow.helper.DateCustom;
 import com.marcosviniciusferreira.casaflow.model.Transaction;
+import com.marcosviniciusferreira.casaflow.model.User;
 
 public class IncomeActivity extends AppCompatActivity {
 
@@ -33,33 +40,58 @@ public class IncomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_income);
 
+        auth = FirebaseConfig.getFirebaseAuth();
+        database = FirebaseConfig.getDatabase();
+
         initializeComponents();
+        getUserTotalIncome();
 
-        fabIncome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        editDate.setText(DateCustom.actualDate());
 
-                String value = editValue.getText().toString();
-                String date = editDate.getText().toString();
-                String category = editCategory.getText().toString();
-                String description = editDescription.getText().toString();
 
-                if (validateFields()) {
-                    Transaction transaction = new Transaction(
-                            date, category, description,
-                            "INCOME", Double.parseDouble(value));
+        fabIncome.setOnClickListener(v -> {
 
-                    updatedIncome = totalIncome + Double.parseDouble(value);
-                    updateIncome(updatedIncome);
+            String value = editValue.getText().toString();
+            String date = editDate.getText().toString();
+            String category = editCategory.getText().toString();
+            String description = editDescription.getText().toString();
 
-//                    finish();
+            if (validateFields()) {
+                Transaction transaction = new Transaction(
+                        date, category, description,
+                        "INCOME", Double.parseDouble(value));
 
-                }
+                transaction.save(date);
+
+                updatedIncome = totalIncome + Double.parseDouble(value);
+                updateIncome(updatedIncome);
+
+                finish();
 
             }
+
         });
 
 
+    }
+
+    private void getUserTotalIncome() {
+        String userEmail = auth.getCurrentUser().getEmail();
+        String idUser = Base64Custom.codeBase64(userEmail);
+        DatabaseReference userRef = database.child("users").child(idUser);
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                totalIncome = user.getTotalIncome();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void updateIncome(Double updatedIncome) {

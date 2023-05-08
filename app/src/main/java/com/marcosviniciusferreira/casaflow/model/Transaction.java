@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
+import com.marcosviniciusferreira.casaflow.helper.DateCustom;
 
 public class Transaction {
 
@@ -26,14 +27,16 @@ public class Transaction {
         this.value = value;
     }
 
-    public void save() {
-
+    public void save(String transactionDate) {
         FirebaseAuth auth = FirebaseConfig.getFirebaseAuth();
         String idUser = Base64Custom.codeBase64(auth.getCurrentUser().getEmail());
 
+        String transactionMonthYear = DateCustom.monthYearChosenDate(transactionDate);
         DatabaseReference database = FirebaseConfig.getDatabase();
+
         database.child("transactions")
                 .child(idUser)
+                .child(transactionMonthYear)
                 .push()
                 .setValue(this);
     }

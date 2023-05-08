@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
         initializeComponents();
         initializeCalendarSettings();
 
-        adapterTransactions = new AdapterTransactions(transactions, this);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapterTransactions);
-        recyclerView.setHasFixedSize(true);
+//        adapterTransactions = new AdapterTransactions(transactions, this);
+//
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(adapterTransactions);
+//        recyclerView.setHasFixedSize(true);
 
         getCurrentTime();
 

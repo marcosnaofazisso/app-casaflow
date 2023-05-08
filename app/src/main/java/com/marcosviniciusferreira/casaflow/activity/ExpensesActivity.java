@@ -1,5 +1,6 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -11,10 +12,16 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.marcosviniciusferreira.casaflow.R;
+import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
+import com.marcosviniciusferreira.casaflow.helper.DateCustom;
 import com.marcosviniciusferreira.casaflow.model.Transaction;
+import com.marcosviniciusferreira.casaflow.model.User;
 
 public class ExpensesActivity extends AppCompatActivity {
 
@@ -34,34 +41,57 @@ public class ExpensesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expenses);
 
+        auth = FirebaseConfig.getFirebaseAuth();
+        database = FirebaseConfig.getDatabase();
+
         initializeComponents();
+        getUserTotalExpenses();
 
+        editDate.setText(DateCustom.actualDate());
 
-        fabExpense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        fabExpense.setOnClickListener(v -> {
 
-                String value = editValue.getText().toString();
-                String date = editDate.getText().toString();
-                String category = editCategory.getText().toString();
-                String description = editDescription.getText().toString();
+            String value = editValue.getText().toString();
+            String date = editDate.getText().toString();
+            String category = editCategory.getText().toString();
+            String description = editDescription.getText().toString();
 
-                if (validateFields()) {
-                    Transaction transaction = new Transaction(
-                            date, category, description,
-                            "EXPENSE", Double.parseDouble(value));
+            if (validateFields()) {
+                Transaction transaction = new Transaction(
+                        date, category, description,
+                        "EXPENSE", Double.parseDouble(value));
 
-                    updatedExpenses = totalExpenses + Double.parseDouble(value);
-                    updateExpenses(updatedExpenses);
+                transaction.save(date);
 
-//                    finish();
+                updatedExpenses = totalExpenses + Double.parseDouble(value);
+                updateExpenses(updatedExpenses);
 
-                }
+                finish();
 
             }
+
         });
 
 
+    }
+
+    private void getUserTotalExpenses() {
+        String userEmail = auth.getCurrentUser().getEmail();
+        String idUser = Base64Custom.codeBase64(userEmail);
+        DatabaseReference userRef = database.child("users").child(idUser);
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                totalExpenses = user.getTotalExpenses();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void updateExpenses(Double updatedExpenses) {
