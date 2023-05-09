@@ -3,6 +3,7 @@ package com.marcosviniciusferreira.casaflow.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +20,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.marcosviniciusferreira.casaflow.R;
 import com.marcosviniciusferreira.casaflow.adapter.AdapterTransactions;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
 import com.marcosviniciusferreira.casaflow.model.Transaction;
 import com.marcosviniciusferreira.casaflow.model.User;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -46,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseConfig.getFirebaseAuth();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference userRef;
     private User user;
+    private DatabaseReference userRef;
+    private DatabaseReference transactionsRef;
 
     private RecyclerView recyclerView;
     private AdapterTransactions adapterTransactions;
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private Double resumeBalance = 0.0;
 
     private ValueEventListener valueEventListenerUser;
+    private ValueEventListener valueEventListenerTransactions;
+    private String selectedMonthYear;
 
 
     @Override
@@ -75,18 +83,28 @@ public class MainActivity extends AppCompatActivity {
 
         resumeUserData();
 
-
-//        adapterTransactions = new AdapterTransactions(transactions, this);
-//
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(adapterTransactions);
-//        recyclerView.setHasFixedSize(true);
-
         String userEmail = auth.getCurrentUser().getEmail();
         String userId = Base64Custom.codeBase64(userEmail);
-
         DatabaseReference userRef = database.child("users").child(userId);
+
+        adapterTransactions = new AdapterTransactions(transactions, this);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapterTransactions);
+        recyclerView.setHasFixedSize(true);
+
+        CalendarDay actualDate = calendarView.getCurrentDate();
+        String selectedMonth = String.format("%02d", (actualDate.getMonth() + 1));
+        selectedMonthYear = selectedMonth + String.valueOf(actualDate.getYear());
+
+
+        calendarView.setOnMonthChangedListener((widget, date) -> {
+            transactionsRef.removeEventListener(valueEventListenerTransactions);
+            getTransactions();
+
+        });
+
 
         userRef.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -94,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 user = snapshot.getValue(User.class);
-
                 welcomeName.setText("Olá, " + user.getName());
 
             }
@@ -111,6 +128,43 @@ public class MainActivity extends AppCompatActivity {
 
         expenseButton.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, ExpensesActivity.class));
+        });
+
+    }
+
+    private void getTransactions() {
+
+        String userEmail = auth.getCurrentUser().getEmail();
+        String idUser = Base64Custom.codeBase64(userEmail);
+
+        transactionsRef = database
+                .child("transactions")
+                .child(idUser)
+                .child(selectedMonthYear);
+
+        valueEventListenerTransactions = transactionsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                transactions.clear();
+
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Transaction currentTransaction = data.getValue(Transaction.class);
+                    currentTransaction.setKey(data.getKey());
+                    transactions.add(currentTransaction);
+
+//                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//                    String json = gson.toJson(data);
+//
+                    Log.i("DATA ====>>>", data.toString());
+                }
+
+                adapterTransactions.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
 
     }
@@ -164,7 +218,8 @@ public class MainActivity extends AppCompatActivity {
             totalIncome -= transaction.getValue();
             userRef.child("totalIncome").setValue(totalIncome);
 
-        }if (transaction.getType().equals("EXPENSE")) {
+        }
+        if (transaction.getType().equals("EXPENSE")) {
             totalExpense -= transaction.getValue();
             userRef.child("totalExpense").setValue(totalExpense);
 
@@ -195,5 +250,22 @@ public class MainActivity extends AppCompatActivity {
 
         calendarView = findViewById(R.id.calendarView);
 
+        recyclerView = findViewById(R.id.recyclerTransactions);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        resumeUserData();
+        getTransactions();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        userRef.removeEventListener(valueEventListenerUser);
+        transactionsRef.removeEventListener(valueEventListenerTransactions);
     }
 }

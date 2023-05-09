@@ -23,9 +23,6 @@ public class DateCustom {
 
         String monthYear = month + year;
 
-        Log.i("date =====>>>>", date.toString());
-        Log.i("monthYearChosenDate =====>>>>", monthYear);
-
         return monthYear;
 
     }

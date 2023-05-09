@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.MainActivity">
 
     <LinearLayout
@@ -21,10 +22,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:text="R$ 0"
             android:textColor="@android:color/white"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="R$ 0" />
 
 
     </LinearLayout>
@@ -33,7 +34,7 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:mcv_selectionColor="#00F"
+        app:mcv_selectionColor="@color/purple_200"
         app:mcv_showOtherDates="all"
         app:mcv_tileSize="50dp" />
 
