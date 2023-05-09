@@ -27,6 +27,7 @@ import com.marcosviniciusferreira.casaflow.model.Transaction;
 import com.marcosviniciusferreira.casaflow.model.User;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +38,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private TextView welcomeName;
+    private TextView generalBalance;
 
     private FloatingActionButton incomeButton;
     private FloatingActionButton expenseButton;
@@ -44,11 +46,19 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseConfig.getFirebaseAuth();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference userRef;
     private User user;
 
     private RecyclerView recyclerView;
     private AdapterTransactions adapterTransactions;
     private List<Transaction> transactions = new ArrayList<>();
+    private Transaction transaction;
+
+    private Double totalExpense = 0.0;
+    private Double totalIncome = 0.0;
+    private Double resumeBalance = 0.0;
+
+    private ValueEventListener valueEventListenerUser;
 
 
     @Override
@@ -63,14 +73,15 @@ public class MainActivity extends AppCompatActivity {
         initializeComponents();
         initializeCalendarSettings();
 
+        resumeUserData();
+
+
 //        adapterTransactions = new AdapterTransactions(transactions, this);
 //
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 //        recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.setAdapter(adapterTransactions);
 //        recyclerView.setHasFixedSize(true);
-
-        getCurrentTime();
 
         String userEmail = auth.getCurrentUser().getEmail();
         String userId = Base64Custom.codeBase64(userEmail);
@@ -104,6 +115,62 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void resumeUserData() {
+
+        String userEmail = auth.getCurrentUser().getEmail();
+        String idUser = Base64Custom.codeBase64(userEmail);
+
+        userRef = database
+                .child("users")
+                .child(idUser);
+
+        valueEventListenerUser = userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                if (user != null) {
+                    totalExpense = user.getTotalExpenses();
+                    totalIncome = user.getTotalIncome();
+
+                    resumeBalance = totalIncome - totalExpense;
+
+                    DecimalFormat decimalFormat = new DecimalFormat("0.##");
+                    String formattedBalace = decimalFormat.format(resumeBalance);
+
+                    generalBalance.setText("R$ " + formattedBalace);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
+    private void updateBalance() {
+
+        String userEmail = auth.getCurrentUser().getEmail();
+        String idUser = Base64Custom.codeBase64(userEmail);
+
+        userRef = database
+                .child("users")
+                .child(idUser);
+
+        if (transaction.getType().equals("INCOME")) {
+            totalIncome -= transaction.getValue();
+            userRef.child("totalIncome").setValue(totalIncome);
+
+        }if (transaction.getType().equals("EXPENSE")) {
+            totalExpense -= transaction.getValue();
+            userRef.child("totalExpense").setValue(totalExpense);
+
+        }
+    }
+
     private void initializeCalendarSettings() {
 
         CharSequence[] translatedMonths = {"Janeiro", "Fevereiro", "Março", "Abril",
@@ -121,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
     private void initializeComponents() {
 
         welcomeName = findViewById(R.id.textMainWelcome);
+        generalBalance = findViewById(R.id.textGeneralBalance);
 
         incomeButton = findViewById(R.id.fabAdd);
         expenseButton = findViewById(R.id.fabRemove);
