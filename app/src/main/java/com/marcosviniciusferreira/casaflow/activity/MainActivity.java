@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        swipeTransactions();
+
 
         userRef.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -135,6 +138,73 @@ public class MainActivity extends AppCompatActivity {
         expenseButton.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, ExpensesActivity.class));
         });
+
+    }
+
+    private void swipeTransactions() {
+
+        ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                removeTransaction(viewHolder);
+            }
+        };
+
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView);
+    }
+
+    private void removeTransaction(RecyclerView.ViewHolder viewHolder) {
+        int position = viewHolder.getAdapterPosition();
+
+        transaction = transactions.get(position);
+
+        String userEmail = auth.getCurrentUser().getEmail();
+        String idUser = Base64Custom.codeBase64(userEmail);
+
+        transactionsRef = database
+                .child("transactions")
+                .child(idUser)
+                .child(selectedMonthYear);
+
+        transactionsRef.child(transaction.getKey()).removeValue();
+
+        adapterTransactions.notifyItemRemoved(position);
+
+        resumeBalance();
+
+    }
+
+    private void resumeBalance() {
+
+        String userEmail = auth.getCurrentUser().getEmail();
+        String idUser = Base64Custom.codeBase64(userEmail);
+
+        transactionsRef = database
+                .child("users")
+                .child(idUser);
+
+        if (transaction.getType().equals("INCOME")) {
+            totalIncome -= transaction.getValue();
+            userRef.child("totalIncome").setValue(totalIncome);
+        }
+        if (transaction.getType().equals("EXPENSE")) {
+            totalExpense -= transaction.getValue();
+            userRef.child("totalExpense").setValue(totalExpense);
+        }
+
 
     }
 
