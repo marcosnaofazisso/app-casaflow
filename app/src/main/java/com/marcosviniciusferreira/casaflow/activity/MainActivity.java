@@ -99,10 +99,16 @@ public class MainActivity extends AppCompatActivity {
         selectedMonthYear = selectedMonth + String.valueOf(actualDate.getYear());
 
 
-        calendarView.setOnMonthChangedListener((widget, date) -> {
-            transactionsRef.removeEventListener(valueEventListenerTransactions);
-            getTransactions();
+        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                String monthSelected = String.format("%02d", (date.getMonth() + 1));
+                selectedMonthYear = monthSelected + String.valueOf(date.getYear());
 
+                transactionsRef.removeEventListener(valueEventListenerTransactions);
+                getTransactions();
+
+            }
         });
 
 
@@ -152,10 +158,6 @@ public class MainActivity extends AppCompatActivity {
                     currentTransaction.setKey(data.getKey());
                     transactions.add(currentTransaction);
 
-//                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//                    String json = gson.toJson(data);
-//
-                    Log.i("DATA ====>>>", data.toString());
                 }
 
                 adapterTransactions.notifyDataSetChanged();
