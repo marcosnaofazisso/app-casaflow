@@ -30,6 +30,15 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textMonthBalance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="Total em Mês: R$ 0" />
+
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
