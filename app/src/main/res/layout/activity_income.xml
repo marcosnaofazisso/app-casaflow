@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/incomeLinearLayout"
         android:layout_width="0dp"
-        android:layout_height="179dp"
+        android:layout_height="200dp"
         android:background="@color/green_check"
         android:gravity="center"
         android:orientation="vertical"
@@ -52,6 +52,7 @@
             android:id="@+id/editIncomeDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/casaflow"
             android:hint="Data "
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -74,6 +75,7 @@
             android:id="@+id/editIncomeCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/casaflow"
             android:hint="Categoria" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,6 +97,7 @@
             android:id="@+id/editIncomeDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/casaflow"
             android:hint="Descrição" />
     </com.google.android.material.textfield.TextInputLayout>
 

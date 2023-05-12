@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView welcomeName;
     private TextView generalBalance;
     private TextView monthBalance;
+    private TextView monthBalanceValue;
 
     private FloatingActionButton incomeButton;
     private FloatingActionButton expenseButton;
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedMonthYear = monthSelected + String.valueOf(date.getYear());
                 monthToBeShown = (String) translatedMonths[date.getMonth()];
 
-            transactionsRef.removeEventListener(valueEventListenerTransactions);
+                transactionsRef.removeEventListener(valueEventListenerTransactions);
                 getTransactions();
             }
         });
@@ -248,9 +249,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resumeMonthBalance() {
-
         Double totalMonthBalance = 0.0;
-
         for (Transaction transaction : transactions) {
             if (transaction.getType().equals("INCOME")) {
                 totalMonthBalance += transaction.getValue();
@@ -262,7 +261,14 @@ public class MainActivity extends AppCompatActivity {
 
         DecimalFormat decimalFormat = new DecimalFormat("0.##");
         String formattedBalance = decimalFormat.format(totalMonthBalance);
-        monthBalance.setText("Total em " + monthToBeShown + " R$ " + formattedBalance);
+
+        if(totalMonthBalance >= 0) {
+            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.green_check));
+        } else {
+            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.red_uncheck));
+        }
+        monthBalance.setText("Total em " + monthToBeShown + ":");
+        monthBalanceValue.setText(" R$ " + formattedBalance);
 
 
     }
@@ -312,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
         welcomeName = findViewById(R.id.textMainWelcome);
         generalBalance = findViewById(R.id.textGeneralBalance);
         monthBalance = findViewById(R.id.textMonthBalance);
+        monthBalanceValue = findViewById(R.id.textMonthBalanceValue);
 
         incomeButton = findViewById(R.id.fabAdd);
         expenseButton = findViewById(R.id.fabRemove);
