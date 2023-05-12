@@ -36,11 +36,41 @@
         android:layout_height="50dp"
         app:mcv_selectionColor="@color/purple_200"
         app:mcv_showOtherDates="all"
-        app:mcv_tileSize="50dp" />
+        app:mcv_tileSize="50dp" >
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/textMonthBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="24sp"
+            android:textStyle="normal"
+            tools:text="Total em Mês:" />
+
+        <TextView
+            android:id="@+id/textMonthBalanceValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textSize="24sp"
+            tools:text="R$ 0" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerTransactions"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:padding="8dp" />
 
 </LinearLayout>

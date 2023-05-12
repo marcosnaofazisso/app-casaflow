@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView welcomeName;
     private TextView generalBalance;
+    private TextView monthBalance;
+    private TextView monthBalanceValue;
 
     private FloatingActionButton incomeButton;
     private FloatingActionButton expenseButton;
@@ -65,9 +67,15 @@ public class MainActivity extends AppCompatActivity {
     private Double totalIncome = 0.0;
     private Double resumeBalance = 0.0;
 
+
     private ValueEventListener valueEventListenerUser;
     private ValueEventListener valueEventListenerTransactions;
     private String selectedMonthYear;
+    private String monthToBeShown;
+
+    CharSequence[] translatedMonths = {"Janeiro", "Fevereiro", "Março", "Abril",
+            "Maio", "Junho", "Julho", "Agosto",
+            "Setembro", "Outubro", "Novembro", "Dezembro"};
 
 
     @Override
@@ -82,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         initializeComponents();
         initializeCalendarSettings();
 
-        resumeUserData();
 
         String userEmail = auth.getCurrentUser().getEmail();
         String userId = Base64Custom.codeBase64(userEmail);
@@ -98,17 +105,20 @@ public class MainActivity extends AppCompatActivity {
         CalendarDay actualDate = calendarView.getCurrentDate();
         String selectedMonth = String.format("%02d", (actualDate.getMonth() + 1));
         selectedMonthYear = selectedMonth + String.valueOf(actualDate.getYear());
+        monthToBeShown = (String) translatedMonths[actualDate.getMonth()];
 
+        resumeUserData();
+        resumeMonthBalance();
 
         calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
                 String monthSelected = String.format("%02d", (date.getMonth() + 1));
                 selectedMonthYear = monthSelected + String.valueOf(date.getYear());
+                monthToBeShown = (String) translatedMonths[date.getMonth()];
 
                 transactionsRef.removeEventListener(valueEventListenerTransactions);
                 getTransactions();
-
             }
         });
 
@@ -119,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 user = snapshot.getValue(User.class);
                 welcomeName.setText("Olá, " + user.getName());
 
@@ -142,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void swipeTransactions() {
-
         ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
@@ -188,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resumeBalance() {
-
         String userEmail = auth.getCurrentUser().getEmail();
         String idUser = Base64Custom.codeBase64(userEmail);
 
@@ -209,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTransactions() {
-
         String userEmail = auth.getCurrentUser().getEmail();
         String idUser = Base64Custom.codeBase64(userEmail);
 
@@ -230,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
+                resumeMonthBalance();
                 adapterTransactions.notifyDataSetChanged();
             }
 
@@ -238,6 +245,31 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void resumeMonthBalance() {
+        Double totalMonthBalance = 0.0;
+        for (Transaction transaction : transactions) {
+            if (transaction.getType().equals("INCOME")) {
+                totalMonthBalance += transaction.getValue();
+            } else {
+                totalMonthBalance -= transaction.getValue();
+            }
+
+        }
+
+        DecimalFormat decimalFormat = new DecimalFormat("0.##");
+        String formattedBalance = decimalFormat.format(totalMonthBalance);
+
+        if(totalMonthBalance >= 0) {
+            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.green_check));
+        } else {
+            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.red_uncheck));
+        }
+        monthBalance.setText("Total em " + monthToBeShown + ":");
+        monthBalanceValue.setText(" R$ " + formattedBalance);
+
 
     }
 
@@ -277,45 +309,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void updateBalance() {
-
-        String userEmail = auth.getCurrentUser().getEmail();
-        String idUser = Base64Custom.codeBase64(userEmail);
-
-        userRef = database
-                .child("users")
-                .child(idUser);
-
-        if (transaction.getType().equals("INCOME")) {
-            totalIncome -= transaction.getValue();
-            userRef.child("totalIncome").setValue(totalIncome);
-
-        }
-        if (transaction.getType().equals("EXPENSE")) {
-            totalExpense -= transaction.getValue();
-            userRef.child("totalExpense").setValue(totalExpense);
-
-        }
-    }
-
     private void initializeCalendarSettings() {
-
-        CharSequence[] translatedMonths = {"Janeiro", "Fevereiro", "Março", "Abril",
-                "Maio", "Junho", "Julho", "Agosto",
-                "Setembro", "Outubro", "Novembro", "Dezembro"};
         calendarView.setTitleMonths(translatedMonths);
-    }
-
-    private void getCurrentTime() {
-        Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedDate = df.format(currentDate);
     }
 
     private void initializeComponents() {
 
         welcomeName = findViewById(R.id.textMainWelcome);
         generalBalance = findViewById(R.id.textGeneralBalance);
+        monthBalance = findViewById(R.id.textMonthBalance);
+        monthBalanceValue = findViewById(R.id.textMonthBalanceValue);
 
         incomeButton = findViewById(R.id.fabAdd);
         expenseButton = findViewById(R.id.fabRemove);

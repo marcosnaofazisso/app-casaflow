@@ -34,6 +34,7 @@
             android:layout_margin="20dp"
             android:backgroundTint="@color/ic_launcher_casaflow_background"
             android:hint="Email"
+            android:inputType="textWebEmailAddress"
             android:textColorLink="@color/purple_200" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,7 +54,8 @@
             android:layout_marginTop="0dp"
             android:layout_marginRight="20dp"
             android:backgroundTint="@color/ic_launcher_casaflow_background"
-            android:hint="Password" />
+            android:hint="Password"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
