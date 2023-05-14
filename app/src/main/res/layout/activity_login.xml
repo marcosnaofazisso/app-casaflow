@@ -56,7 +56,9 @@
             android:backgroundTint="@color/ic_launcher_casaflow_background"
             android:hint="Password"
             android:inputType="textPassword" />
+
     </com.google.android.material.textfield.TextInputLayout>
+
 
     <Button
         android:id="@+id/buttonEntrar"
