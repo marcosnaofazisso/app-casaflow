@@ -11,7 +11,7 @@ public class User {
     private String email;
     private String password;
 
-    private Double totalExpenses = 0.0;
+    private Double totalExpense = 0.0;
     private Double totalIncome = 0.0;
 
     public User() {
@@ -58,12 +58,12 @@ public class User {
         this.password = password;
     }
 
-    public Double getTotalExpenses() {
-        return totalExpenses;
+    public Double getTotalExpense() {
+        return totalExpense;
     }
 
-    public void setTotalExpenses(Double totalExpenses) {
-        this.totalExpenses = totalExpenses;
+    public void setTotalExpense(Double totalExpense) {
+        this.totalExpense = totalExpense;
     }
 
     public Double getTotalIncome() {

@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 if (user != null) {
-                    totalExpense = user.getTotalExpenses();
+                    totalExpense = user.getTotalExpense();
                     totalIncome = user.getTotalIncome();
 
                     resumeBalance = totalIncome - totalExpense;
