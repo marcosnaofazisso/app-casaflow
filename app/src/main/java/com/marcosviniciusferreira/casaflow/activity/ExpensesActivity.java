@@ -84,7 +84,7 @@ public class ExpensesActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                totalExpenses = user.getTotalExpenses();
+                totalExpenses = user.getTotalExpense();
             }
 
             @Override
@@ -99,7 +99,7 @@ public class ExpensesActivity extends AppCompatActivity {
         String idUser = Base64Custom.codeBase64(userEmail);
         DatabaseReference userRef = database.child("users").child(idUser);
 
-        userRef.child("totalExpenses").setValue(updatedExpenses);
+        userRef.child("totalExpense").setValue(updatedExpenses);
     }
 
     private boolean validateFields() {
