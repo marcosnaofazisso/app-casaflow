@@ -42,6 +42,7 @@
         android:id="@+id/textInputLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -81,13 +82,12 @@
         android:layout_margin="20dp"
         android:autoLink="none"
         android:clickable="false"
-        android:text="Ainda não tenho conta"
+        android:text="Criar nova conta"
         android:textColor="@color/teal_200"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonEntrar"
         app:layout_constraintVertical_bias="0.0" />
