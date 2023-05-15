@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -25,10 +26,10 @@ import com.marcosviniciusferreira.casaflow.model.User;
 public class RegisterActivity extends AppCompatActivity {
 
     private Button buttonRegister;
-    private EditText editName;
-    private EditText editEmail;
-    private EditText editPassword;
-    private EditText editPasswordConfirmation;
+    private TextInputEditText editName;
+    private TextInputEditText editEmail;
+    private TextInputEditText editPassword;
+    private TextInputEditText editPasswordConfirmation;
 
     private String name;
     private String email;
@@ -146,6 +147,6 @@ public class RegisterActivity extends AppCompatActivity {
         editName = findViewById(R.id.editTextName);
         editEmail = findViewById(R.id.editTextEmail);
         editPassword = findViewById(R.id.editTextPassword);
-        editPasswordConfirmation = findViewById(R.id.editTextPasswordConfirmation);
+        editPasswordConfirmation = findViewById(R.id.editTextConfirmPassword);
     }
 }
