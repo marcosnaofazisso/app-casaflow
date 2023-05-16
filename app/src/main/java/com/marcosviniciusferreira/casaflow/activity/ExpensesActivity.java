@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.blackcat.currencyedittext.CurrencyEditText;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,9 +24,11 @@ import com.marcosviniciusferreira.casaflow.helper.DateCustom;
 import com.marcosviniciusferreira.casaflow.model.Transaction;
 import com.marcosviniciusferreira.casaflow.model.User;
 
+import java.util.Locale;
+
 public class ExpensesActivity extends AppCompatActivity {
 
-    private EditText editValue;
+    private CurrencyEditText editValue;
     private TextInputEditText editDate, editCategory, editDescription;
     private FloatingActionButton fabExpense;
 
@@ -51,7 +54,7 @@ public class ExpensesActivity extends AppCompatActivity {
 
         fabExpense.setOnClickListener(v -> {
 
-            String value = editValue.getText().toString();
+            String value = String.valueOf(editValue.getRawValue());
             String date = editDate.getText().toString();
             String category = editCategory.getText().toString();
             String description = editDescription.getText().toString();
@@ -128,5 +131,9 @@ public class ExpensesActivity extends AppCompatActivity {
         editCategory = findViewById(R.id.editExpenseCategory);
         editDescription = findViewById(R.id.editExpenseDescription);
         fabExpense = findViewById(R.id.fabExpenses);
+
+        Locale locale = new Locale("pt", "BR");
+        editValue.setLocale(locale);
+        editValue.setDecimalDigits(2);
     }
 }

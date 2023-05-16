@@ -90,5 +90,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/baseline_remove_24" />
 
+    <ImageView
+        android:id="@+id/buttonExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_power_settings_new_24" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
