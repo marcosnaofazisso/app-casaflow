@@ -1,13 +1,18 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView generalBalance;
     private TextView monthBalance;
     private TextView monthBalanceValue;
+    private ImageView buttonExit;
 
     private FloatingActionButton incomeButton;
     private FloatingActionButton expenseButton;
@@ -109,6 +115,26 @@ public class MainActivity extends AppCompatActivity {
 
         resumeUserData();
         resumeMonthBalance();
+
+        buttonExit.setOnClickListener(v -> {
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Sair");
+            alertDialog.setMessage("Tem certeza que deseja sair?");
+
+            alertDialog.setNegativeButton("Não", (dialog, which) -> {
+            });
+            alertDialog.setPositiveButton("Sim", (dialog, which) -> {
+                auth.signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+
+            });
+            AlertDialog alert = alertDialog.create();
+            alert.show();
+
+
+        });
 
         calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
@@ -262,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
         DecimalFormat decimalFormat = new DecimalFormat("0.##");
         String formattedBalance = decimalFormat.format(totalMonthBalance);
 
-        if(totalMonthBalance >= 0) {
+        if (totalMonthBalance >= 0) {
             monthBalanceValue.setTextColor(this.getResources().getColor(R.color.green_check));
         } else {
             monthBalanceValue.setTextColor(this.getResources().getColor(R.color.red_uncheck));
@@ -319,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
         generalBalance = findViewById(R.id.textGeneralBalance);
         monthBalance = findViewById(R.id.textMonthBalance);
         monthBalanceValue = findViewById(R.id.textMonthBalanceValue);
+        buttonExit = findViewById(R.id.buttonExit);
 
         incomeButton = findViewById(R.id.fabAdd);
         expenseButton = findViewById(R.id.fabRemove);
