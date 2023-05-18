@@ -23,6 +23,7 @@ import com.marcosviniciusferreira.casaflow.helper.DateCustom;
 import com.marcosviniciusferreira.casaflow.model.Transaction;
 import com.marcosviniciusferreira.casaflow.model.User;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 public class IncomeActivity extends AppCompatActivity {
@@ -54,21 +55,22 @@ public class IncomeActivity extends AppCompatActivity {
 
         fabIncome.setOnClickListener(v -> {
 
-            String value = String.valueOf(editValue.getRawValue());
+            String value = addCommasToDecimal(String.valueOf(editValue.getRawValue()));
             String date = editDate.getText().toString();
             String category = editCategory.getText().toString();
             String description = editDescription.getText().toString();
 
+            Double incomeValue = Double.parseDouble(value);
+
+
             if (validateFields()) {
                 Transaction transaction = new Transaction(
                         date, category, description,
-                        "INCOME", Double.parseDouble(value));
+                        "INCOME", incomeValue);
 
                 transaction.save(date);
-
-                updatedIncome = totalIncome + Double.parseDouble(value);
+                updatedIncome = totalIncome + incomeValue;
                 updateIncome(updatedIncome);
-
                 finish();
 
             }
@@ -103,6 +105,12 @@ public class IncomeActivity extends AppCompatActivity {
         DatabaseReference userRef = database.child("users").child(idUser);
 
         userRef.child("totalIncome").setValue(updatedIncome);
+    }
+
+    private String addCommasToDecimal(String numberString) {
+        Double number = Double.parseDouble(numberString);
+        DecimalFormat decimalFormat = new DecimalFormat("#,##");
+        return decimalFormat.format(number).replace(",", ".");
     }
 
     private boolean validateFields() {

@@ -48,10 +48,11 @@ public class AdapterTransactions extends RecyclerView.Adapter<AdapterTransaction
     private void textColorSettings(MyViewHolder holder, Transaction transaction) {
 
         holder.value.setTextColor(context.getResources().getColor(R.color.green_check));
+        holder.value.setText(String.valueOf(transaction.getValue()).replace(".", ","));
 
         if (transaction.getType() == "EXPENSE" || transaction.getType().equals("EXPENSE")) {
             holder.value.setTextColor(context.getResources().getColor(R.color.red_uncheck));
-            holder.value.setText("-" + transaction.getValue());
+            holder.value.setText("-" + String.valueOf(transaction.getValue()).replace(".", ","));
         }
     }
 
