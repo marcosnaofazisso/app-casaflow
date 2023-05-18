@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("0.##");
-        String formattedBalance = decimalFormat.format(totalMonthBalance);
+        String formattedBalance = decimalFormat.format(totalMonthBalance).replace(".", ",");
 
         if (totalMonthBalance >= 0) {
             monthBalanceValue.setTextColor(this.getResources().getColor(R.color.green_check));
@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
                     resumeBalance = totalIncome - totalExpense;
 
                     DecimalFormat decimalFormat = new DecimalFormat("0.##");
-                    String formattedBalace = decimalFormat.format(resumeBalance);
+                    String formattedBalace = decimalFormat.format(resumeBalance).replace(".", ",");
 
                     generalBalance.setText("R$ " + formattedBalace);
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.marcosviniciusferreira.casaflow.helper.DateCustom;
 import com.marcosviniciusferreira.casaflow.model.Transaction;
 import com.marcosviniciusferreira.casaflow.model.User;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 public class ExpensesActivity extends AppCompatActivity {
@@ -54,21 +56,21 @@ public class ExpensesActivity extends AppCompatActivity {
 
         fabExpense.setOnClickListener(v -> {
 
-            String value = String.valueOf(editValue.getRawValue());
+            String value = addCommasToDecimal(String.valueOf(editValue.getRawValue()));
             String date = editDate.getText().toString();
             String category = editCategory.getText().toString();
             String description = editDescription.getText().toString();
 
+            Double expenseValue = Double.parseDouble(value);
+
             if (validateFields()) {
                 Transaction transaction = new Transaction(
                         date, category, description,
-                        "EXPENSE", Double.parseDouble(value));
+                        "EXPENSE", expenseValue);
 
                 transaction.save(date);
-
-                updatedExpenses = totalExpenses + Double.parseDouble(value);
+                updatedExpenses = totalExpenses + expenseValue;
                 updateExpenses(updatedExpenses);
-
                 finish();
 
             }
@@ -76,6 +78,12 @@ public class ExpensesActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private String addCommasToDecimal(String numberString) {
+        Double number = Double.parseDouble(numberString);
+        DecimalFormat decimalFormat = new DecimalFormat("#,##");
+        return decimalFormat.format(number).replace(",", ".");
     }
 
     private void getUserTotalExpenses() {
