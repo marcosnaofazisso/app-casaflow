@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -55,7 +56,7 @@ public class IncomeActivity extends AppCompatActivity {
 
         fabIncome.setOnClickListener(v -> {
 
-            String value = addCommasToDecimal(String.valueOf(editValue.getRawValue()));
+            String value = transformedToString(editValue.getRawValue());
             String date = editDate.getText().toString();
             String category = editCategory.getText().toString();
             String description = editDescription.getText().toString();
@@ -107,10 +108,9 @@ public class IncomeActivity extends AppCompatActivity {
         userRef.child("totalIncome").setValue(updatedIncome);
     }
 
-    private String addCommasToDecimal(String numberString) {
-        Double number = Double.parseDouble(numberString);
-        DecimalFormat decimalFormat = new DecimalFormat("#,##");
-        return decimalFormat.format(number).replace(",", ".");
+    private String transformedToString(Long numberLong) {
+        Double number = Double.parseDouble(String.valueOf(numberLong)) / 100.0;
+        return String.valueOf(number);
     }
 
     private boolean validateFields() {

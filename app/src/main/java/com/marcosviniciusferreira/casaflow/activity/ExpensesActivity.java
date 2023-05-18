@@ -56,7 +56,7 @@ public class ExpensesActivity extends AppCompatActivity {
 
         fabExpense.setOnClickListener(v -> {
 
-            String value = addCommasToDecimal(String.valueOf(editValue.getRawValue()));
+            String value = transformedToString(editValue.getRawValue());
             String date = editDate.getText().toString();
             String category = editCategory.getText().toString();
             String description = editDescription.getText().toString();
@@ -80,10 +80,9 @@ public class ExpensesActivity extends AppCompatActivity {
 
     }
 
-    private String addCommasToDecimal(String numberString) {
-        Double number = Double.parseDouble(numberString);
-        DecimalFormat decimalFormat = new DecimalFormat("#,##");
-        return decimalFormat.format(number).replace(",", ".");
+    private String transformedToString(Long numberLong) {
+        Double number = Double.parseDouble(String.valueOf(numberLong)) / 100.0;
+        return String.valueOf(number);
     }
 
     private void getUserTotalExpenses() {
