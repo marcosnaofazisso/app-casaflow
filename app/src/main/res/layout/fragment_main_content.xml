@@ -23,7 +23,7 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
+            android:textSize="38sp"
             android:textStyle="bold"
             tools:text="R$ 0" />
 
