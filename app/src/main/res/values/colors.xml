@@ -10,4 +10,5 @@
     <color name="casaflow">#FCFCFC</color>
     <color name="green_check">#00D39E</color>
     <color name="red_uncheck">#FF706A</color>
+    <color name="grey">#999999</color>
 </resources>

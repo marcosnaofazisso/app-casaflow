@@ -39,6 +39,9 @@ public class IncomeActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DatabaseReference database;
 
+    private boolean isVisitor = false;
+    private DatabaseReference userRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,9 @@ public class IncomeActivity extends AppCompatActivity {
 
         auth = FirebaseConfig.getFirebaseAuth();
         database = FirebaseConfig.getDatabase();
+
+        Bundle data = getIntent().getExtras();
+        isVisitor = data.getBoolean("visitor");
 
         initializeComponents();
         getUserTotalIncome();
@@ -84,7 +90,13 @@ public class IncomeActivity extends AppCompatActivity {
     private void getUserTotalIncome() {
         String userEmail = auth.getCurrentUser().getEmail();
         String idUser = Base64Custom.codeBase64(userEmail);
-        DatabaseReference userRef = database.child("users").child(idUser);
+        if (isVisitor) {
+            userRef = database.child("visitors").child(idUser);
+
+        } else {
+            userRef = database.child("users").child(idUser);
+
+        }
 
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -103,7 +115,13 @@ public class IncomeActivity extends AppCompatActivity {
     private void updateIncome(Double updatedIncome) {
         String userEmail = auth.getCurrentUser().getEmail();
         String idUser = Base64Custom.codeBase64(userEmail);
-        DatabaseReference userRef = database.child("users").child(idUser);
+        if (isVisitor) {
+            userRef = database.child("visitors").child(idUser);
+
+        } else {
+            userRef = database.child("users").child(idUser);
+
+        }
 
         userRef.child("totalIncome").setValue(updatedIncome);
     }

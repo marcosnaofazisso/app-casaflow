@@ -49,14 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         initializeComponents();
 
 
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fieldValidations();
-
-
-            }
-        });
+        buttonRegister.setOnClickListener(v -> fieldValidations());
 
     }
 

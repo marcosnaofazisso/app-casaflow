@@ -24,6 +24,12 @@ public class User {
                 .child(this.id)
                 .setValue(this);
     }
+    public void saveVisitor() {
+        DatabaseReference database = FirebaseConfig.getDatabase();
+        database.child("visitors")
+                .child(this.id)
+                .setValue(this);
+    }
 
     public String getId() {
         return id;
