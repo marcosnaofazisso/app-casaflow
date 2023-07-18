@@ -40,6 +40,8 @@ public class ExpensesActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DatabaseReference database;
 
+    private boolean isVisitor = false;
+    private DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ public class ExpensesActivity extends AppCompatActivity {
 
         auth = FirebaseConfig.getFirebaseAuth();
         database = FirebaseConfig.getDatabase();
+
+        Bundle data = getIntent().getExtras();
+        isVisitor = data.getBoolean("visitor");
 
         initializeComponents();
         getUserTotalExpenses();
@@ -88,7 +93,13 @@ public class ExpensesActivity extends AppCompatActivity {
     private void getUserTotalExpenses() {
         String userEmail = auth.getCurrentUser().getEmail();
         String idUser = Base64Custom.codeBase64(userEmail);
-        DatabaseReference userRef = database.child("users").child(idUser);
+        if (isVisitor) {
+            userRef = database.child("visitors").child(idUser);
+
+        } else {
+            userRef = database.child("users").child(idUser);
+
+        }
 
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -107,7 +118,13 @@ public class ExpensesActivity extends AppCompatActivity {
     private void updateExpenses(Double updatedExpenses) {
         String userEmail = auth.getCurrentUser().getEmail();
         String idUser = Base64Custom.codeBase64(userEmail);
-        DatabaseReference userRef = database.child("users").child(idUser);
+        if (isVisitor) {
+            userRef = database.child("visitors").child(idUser);
+
+        } else {
+            userRef = database.child("users").child(idUser);
+
+        }
 
         userRef.child("totalExpense").setValue(updatedExpenses);
     }

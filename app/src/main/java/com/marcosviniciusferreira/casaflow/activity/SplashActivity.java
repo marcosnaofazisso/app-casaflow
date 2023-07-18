@@ -20,15 +20,13 @@ import com.marcosviniciusferreira.casaflow.R;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
-    private TextView textAppVersion;
-
     @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        textAppVersion = findViewById(R.id.textAppVersion);
+        TextView textAppVersion = findViewById(R.id.textAppVersion);
 
         PackageManager packageManager = this.getPackageManager();
         String packageName = this.getPackageName();
@@ -58,7 +56,7 @@ public class SplashActivity extends AppCompatActivity {
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.casaflow));
 
 
-        new Handler().postDelayed(this::openMainActivity, 10000);
+        new Handler().postDelayed(this::openMainActivity, 3000);
     }
 
     private void openMainActivity() {

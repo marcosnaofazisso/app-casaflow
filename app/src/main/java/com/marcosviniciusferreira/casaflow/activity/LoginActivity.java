@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,9 +18,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.marcosviniciusferreira.casaflow.R;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
+import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
 import com.marcosviniciusferreira.casaflow.model.User;
+
+import java.util.UUID;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText textEmail;
     private TextInputEditText textPassword;
     private TextView textRegister;
+    private TextView textVisitor;
 
     private String email;
     private String password;
@@ -44,60 +53,151 @@ public class LoginActivity extends AppCompatActivity {
 
         initComponents();
 
-        buttonEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fieldsValidated()) {
-                    user = new User();
-                    user.setEmail(email);
-                    user.setPassword(password);
-                    signIn();
-                }
+        buttonEnter.setOnClickListener(v -> {
+            if (fieldsValidated()) {
+                user = new User();
+                user.setEmail(email);
+                user.setPassword(password);
+                signIn(false);
             }
         });
 
 
-        textRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
+        textRegister.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+
+        textVisitor.setOnClickListener(v -> {
+            signIn(true);
+
+
         });
     }
 
-    private void signIn() {
+    private void signIn(Boolean visitor) {
         auth = FirebaseConfig.getFirebaseAuth();
-        auth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+        if (!visitor) {
+            auth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
 
-                            openMainActivity();
+                                openMainActivity(visitor);
 
-                        } else {
-                            String error = "";
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthInvalidUserException e) {
-                                error = "Usuário inválido. Por favor, verifique";
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                error = "Dados inválidos. Por favor, tente novamente!";
+                            } else {
+                                String error = "";
+                                try {
+                                    throw task.getException();
+                                } catch (FirebaseAuthInvalidUserException e) {
+                                    error = "Usuário inválido. Por favor, verifique";
+                                } catch (FirebaseAuthInvalidCredentialsException e) {
+                                    error = "Dados inválidos. Por favor, tente novamente!";
 
-                            } catch (Exception e) {
-                                error = "Erro ao cadastrar usuário: " + e.getMessage();
+                                } catch (Exception e) {
+                                    error = "Erro ao cadastrar usuário: " + e.getMessage();
+                                }
+
+                                Toast.makeText(LoginActivity.this,
+                                        error,
+                                        Toast.LENGTH_SHORT).show();
+
                             }
-
-                            Toast.makeText(LoginActivity.this,
-                                    error,
-                                    Toast.LENGTH_SHORT).show();
-
                         }
-                    }
-                });
+                    });
+        } else {
+
+            createVisitorCredentials();
+
+            auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this,
+                            new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                    if (task.isSuccessful()) {
+                                        auth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
+                                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                                        if (task.isSuccessful()) {
+
+                                                            openMainActivity(visitor);
+
+                                                        } else {
+                                                            String error = "";
+                                                            try {
+                                                                throw task.getException();
+                                                            } catch (
+                                                                    FirebaseAuthInvalidUserException e) {
+                                                                error = "Usuário inválido. Por favor, verifique";
+                                                            } catch (
+                                                                    FirebaseAuthInvalidCredentialsException e) {
+                                                                error = "Dados inválidos. Por favor, tente novamente!";
+
+                                                            } catch (Exception e) {
+                                                                error = "Erro ao cadastrar usuário: " + e.getMessage();
+                                                            }
+
+                                                            Toast.makeText(LoginActivity.this,
+                                                                    error,
+                                                                    Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    }
+                                                });
+
+                                    } else {
+
+                                        String error = "";
+
+                                        try {
+                                            throw task.getException();
+                                        } catch (FirebaseAuthWeakPasswordException e) {
+                                            error = "Digite uma senha mais forte";
+                                        } catch (FirebaseAuthInvalidCredentialsException e) {
+                                            error = "Por favor, digite um e-mail válido!";
+
+                                        } catch (FirebaseAuthUserCollisionException e) {
+                                            error = "Conta já existente!";
+
+                                        } catch (Exception e) {
+                                            error = "Erro ao cadastrar usuário:" + e.getMessage();
+                                        }
+
+                                        Toast.makeText(LoginActivity.this,
+                                                error,
+                                                Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                }
+
+                            });
+
+        }
     }
 
-    private void openMainActivity() {
+    private void createVisitorCredentials() {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        email = "visitor@" + uuid + ".com";
+        password = uuid;
+        String visitorName = "Visitante";
+        user = new User();
+        user.setName(visitorName);
+        user.setEmail(email);
+        String idUser = Base64Custom.codeBase64(user.getEmail());
+        user.setId(idUser);
+        user.setPassword(password);
+        user.saveVisitor();
+    }
+
+    private void openMainActivity(Boolean visitor) {
+        if (visitor) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("stringVisitor", "true");
+            startActivity(intent);
+
+        }
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
@@ -118,5 +218,7 @@ public class LoginActivity extends AppCompatActivity {
         textEmail = findViewById(R.id.inputEmail);
         textPassword = findViewById(R.id.inputPassword);
         textRegister = findViewById(R.id.textRegister);
+        textVisitor = findViewById(R.id.textVisitor);
+
     }
 }

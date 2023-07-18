@@ -1,20 +1,15 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,12 +34,8 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,11 +64,12 @@ public class MainActivity extends AppCompatActivity {
     private Double totalIncome = 0.0;
     private Double resumeBalance = 0.0;
 
-
     private ValueEventListener valueEventListenerUser;
     private ValueEventListener valueEventListenerTransactions;
     private String selectedMonthYear;
     private String monthToBeShown;
+
+    private boolean isVisitor;
 
     CharSequence[] translatedMonths = {"Janeiro", "Fevereiro", "Março", "Abril",
             "Maio", "Junho", "Julho", "Agosto",
@@ -90,16 +82,24 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        String json = gson.toJson(userName);
-
         initializeComponents();
         initializeCalendarSettings();
 
-
         String userEmail = auth.getCurrentUser().getEmail();
         String userId = Base64Custom.codeBase64(userEmail);
-        DatabaseReference userRef = database.child("users").child(userId);
+
+        Bundle data = getIntent().getExtras();
+        String stringVisitor = data.getString("stringVisitor");
+        if(!stringVisitor.isEmpty()) {
+            isVisitor = true;
+        }
+
+        userRef = database.child("users").child(userId);
+
+        if (isVisitor) {
+            userRef = database.child("visitors").child(userId);
+
+        }
 
         adapterTransactions = new AdapterTransactions(transactions, this);
 
@@ -156,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
-                welcomeName.setText("Olá, " + user.getName());
+                String userName = user.getName();
+                welcomeName.setText("Olá, " + userName);
 
             }
 
@@ -167,11 +168,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         incomeButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, IncomeActivity.class));
+            Intent intent = new Intent(getApplicationContext(), IncomeActivity.class);
+            intent.putExtra("visitor", isVisitor);
+            startActivity(intent);
         });
 
         expenseButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, ExpensesActivity.class));
+            Intent intent = new Intent(getApplicationContext(), ExpensesActivity.class);
+            intent.putExtra("visitor", isVisitor);
+            startActivity(intent);
         });
 
     }
@@ -304,9 +309,17 @@ public class MainActivity extends AppCompatActivity {
         String userEmail = auth.getCurrentUser().getEmail();
         String idUser = Base64Custom.codeBase64(userEmail);
 
-        userRef = database
-                .child("users")
-                .child(idUser);
+        if (isVisitor) {
+            userRef = database
+                    .child("visitors")
+                    .child(idUser);
+        } else {
+            userRef = database
+                    .child("users")
+                    .child(idUser);
+
+
+        }
 
         valueEventListenerUser = userRef.addValueEventListener(new ValueEventListener() {
             @Override
