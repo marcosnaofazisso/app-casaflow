@@ -68,6 +68,12 @@ public class ExpensesActivity extends AppCompatActivity {
 
             Double expenseValue = Double.parseDouble(value);
 
+            editValue.setOnFocusChangeListener((view, hasFocus) -> {
+                if (hasFocus) {
+                    editValue.setSelection(editValue.getText().length());
+                }
+            });
+
             if (validateFields()) {
                 Transaction transaction = new Transaction(
                         date, category, description,
