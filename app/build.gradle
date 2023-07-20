@@ -48,5 +48,8 @@ dependencies {
 
     implementation 'com.github.BlacKCaT27:CurrencyEditText:2.0.2'
 
+    implementation 'com.heinrichreimersoftware:material-intro:2.0.0'
+
+
 
 }

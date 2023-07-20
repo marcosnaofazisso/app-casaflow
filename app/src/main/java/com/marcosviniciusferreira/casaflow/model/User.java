@@ -1,7 +1,11 @@
 package com.marcosviniciusferreira.casaflow.model;
 
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 
 public class User {
@@ -24,11 +28,17 @@ public class User {
                 .child(this.id)
                 .setValue(this);
     }
+
     public void saveVisitor() {
         DatabaseReference database = FirebaseConfig.getDatabase();
+
         database.child("visitors")
                 .child(this.id)
                 .setValue(this);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(this);
+        Log.i("USER >>>>>>>>", json);
     }
 
     public String getId() {

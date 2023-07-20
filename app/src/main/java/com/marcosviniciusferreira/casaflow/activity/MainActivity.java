@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private String selectedMonthYear;
     private String monthToBeShown;
 
-    private boolean isVisitor;
+    private boolean isVisitor = false;
 
     CharSequence[] translatedMonths = {"Janeiro", "Fevereiro", "Março", "Abril",
             "Maio", "Junho", "Julho", "Agosto",
@@ -91,10 +91,11 @@ public class MainActivity extends AppCompatActivity {
             isVisitor = true;
         }
 
-        userRef = database.child("users").child(userId);
-
         if (isVisitor) {
             userRef = database.child("visitors").child(userId);
+
+        } else {
+            userRef = database.child("users").child(userId);
 
         }
 
@@ -152,8 +153,15 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
-                String userName = user.getName();
+                String userName = "";
+                if (snapshot.getValue() != null) {
+                    user = snapshot.getValue(User.class);
+                    userName = user.getName();
+
+                } else {
+                    userName = "Visitante";
+
+                }
                 welcomeName.setText("Olá, " + userName);
 
             }
