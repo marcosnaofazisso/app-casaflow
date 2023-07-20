@@ -192,13 +192,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openMainActivity(Boolean visitor) {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         if (visitor) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("stringVisitor", "true");
-            startActivity(intent);
 
+        } else {
+            intent.putExtra("stringVisitor", "false");
         }
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(intent);
         finish();
     }
 

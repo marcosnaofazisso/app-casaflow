@@ -3,7 +3,6 @@ package com.marcosviniciusferreira.casaflow.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.marcosviniciusferreira.casaflow.R;
 import com.marcosviniciusferreira.casaflow.adapter.AdapterTransactions;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
@@ -36,6 +33,7 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,8 +87,7 @@ public class MainActivity extends AppCompatActivity {
         String userId = Base64Custom.codeBase64(userEmail);
 
         Bundle data = getIntent().getExtras();
-        String stringVisitor = data.getString("stringVisitor");
-        if(!stringVisitor.isEmpty()) {
+        if (Objects.equals(data.getString("stringVisitor"), "true")) {
             isVisitor = true;
         }
 
@@ -293,10 +290,13 @@ public class MainActivity extends AppCompatActivity {
         DecimalFormat decimalFormat = new DecimalFormat("0.##");
         String formattedBalance = decimalFormat.format(totalMonthBalance).replace(".", ",");
 
-        if (totalMonthBalance >= 0) {
+        if (totalMonthBalance > 0) {
             monthBalanceValue.setTextColor(this.getResources().getColor(R.color.green_check));
-        } else {
+        } else if (totalMonthBalance < 0) {
             monthBalanceValue.setTextColor(this.getResources().getColor(R.color.red_uncheck));
+        } else {
+            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.grey));
+
         }
         monthBalance.setText("Total em " + monthToBeShown + ":");
         monthBalanceValue.setText(" R$ " + formattedBalance);

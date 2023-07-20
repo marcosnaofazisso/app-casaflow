@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/casaflow"
     tools:context=".activity.IncomeActivity">
 
     <LinearLayout
@@ -24,13 +25,14 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:ems="10"
-            app:decimal_digits="0"
             android:gravity="end"
             android:hapticFeedbackEnabled="false"
             android:hint="R$ 00.00"
             android:inputType="numberDecimal"
             android:textColor="@android:color/white"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:selectAllOnFocus="true"
+            app:decimal_digits="0" />
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout

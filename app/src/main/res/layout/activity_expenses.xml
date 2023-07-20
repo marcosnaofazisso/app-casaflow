@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/casaflow"
     tools:context=".activity.ExpensesActivity">
 
     <LinearLayout
@@ -24,13 +25,14 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:ems="10"
-            app:decimal_digits="0"
             android:gravity="end"
             android:hapticFeedbackEnabled="false"
             android:hint="R$ 00.00"
             android:inputType="numberDecimal"
             android:textColor="@android:color/white"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:selectAllOnFocus="true"
+            app:decimal_digits="0" />
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -110,11 +112,11 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_margin="10dp"
-        app:fabCustomSize="80dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:contentDescription="Confirm Expense"
         app:backgroundTint="@color/red_uncheck"
+        app:fabCustomSize="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -59,6 +59,12 @@ public class IncomeActivity extends AppCompatActivity {
 
         editDate.setText(DateCustom.actualDate());
 
+        editValue.setOnFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) {
+                editValue.setSelection(editValue.getText().length());
+            }
+        });
+
 
         fabIncome.setOnClickListener(v -> {
 

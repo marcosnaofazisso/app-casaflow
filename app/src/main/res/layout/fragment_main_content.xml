@@ -13,14 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/purple_200"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/textTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="SALDO GERAL"
+            android:textColor="@color/casaflow" />
 
         <TextView
             android:id="@+id/textGeneralBalance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="38sp"
