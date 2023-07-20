@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText textPassword;
     private TextView textRegister;
     private TextView textVisitor;
+    private ProgressBar loginProgressBar;
 
     private String email;
     private String password;
@@ -215,11 +217,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        buttonEnter = findViewById(R.id.buttonEntrar);
+        buttonEnter = findViewById(R.id.buttonLogin);
         textEmail = findViewById(R.id.inputEmail);
         textPassword = findViewById(R.id.inputPassword);
         textRegister = findViewById(R.id.textRegister);
         textVisitor = findViewById(R.id.textVisitor);
+        loginProgressBar = findViewById(R.id.loginProgressBar);
 
     }
 }
