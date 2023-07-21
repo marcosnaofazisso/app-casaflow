@@ -3,10 +3,8 @@ package com.marcosviniciusferreira.casaflow.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
@@ -55,7 +53,7 @@ public class IntroductionsActivity extends com.heinrichreimersoftware.materialin
         addSlide(
                 new FragmentSlide.Builder()
                         .fragment(R.layout.intro_4)
-                        .background(android.R.color.white)
+                        .background(R.color.casaflow)
                         .backgroundDark(R.color.purple_200)
                         .build()
         );

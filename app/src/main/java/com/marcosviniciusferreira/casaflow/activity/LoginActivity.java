@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private User user;
     private FirebaseAuth auth;
+    private boolean isLoading = false;
 
 
     @Override
@@ -56,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         initComponents();
 
         buttonEnter.setOnClickListener(v -> {
+            isLoading = true;
             if (fieldsValidated()) {
                 user = new User();
                 user.setEmail(email);
@@ -65,10 +67,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        textRegister.setOnClickListener(v ->
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+        textRegister.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
 
         textVisitor.setOnClickListener(v -> {
+            isLoading = true;
             signIn(true);
 
 
@@ -77,106 +79,103 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signIn(Boolean visitor) {
         auth = FirebaseConfig.getFirebaseAuth();
+        handleLoadingProgressBar();
         if (!visitor) {
-            auth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+            auth.signInWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        isLoading = false;
+                        openMainActivity(visitor);
 
-                                openMainActivity(visitor);
+                    } else {
+                        isLoading = false;
+                        String error = "";
+                        try {
+                            throw task.getException();
+                        } catch (FirebaseAuthInvalidUserException e) {
+                            error = "Usuário inválido. Por favor, verifique";
+                        } catch (FirebaseAuthInvalidCredentialsException e) {
+                            error = "Dados inválidos. Por favor, tente novamente!";
 
-                            } else {
-                                String error = "";
-                                try {
-                                    throw task.getException();
-                                } catch (FirebaseAuthInvalidUserException e) {
-                                    error = "Usuário inválido. Por favor, verifique";
-                                } catch (FirebaseAuthInvalidCredentialsException e) {
-                                    error = "Dados inválidos. Por favor, tente novamente!";
-
-                                } catch (Exception e) {
-                                    error = "Erro ao cadastrar usuário: " + e.getMessage();
-                                }
-
-                                Toast.makeText(LoginActivity.this,
-                                        error,
-                                        Toast.LENGTH_SHORT).show();
-
-                            }
+                        } catch (Exception e) {
+                            error = "Erro ao cadastrar usuário: " + e.getMessage();
                         }
-                    });
+
+                        Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
         } else {
 
             createVisitorCredentials();
 
-            auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this,
-                            new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                    if (task.isSuccessful()) {
-                                        auth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
-                                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                                        if (task.isSuccessful()) {
+                    if (task.isSuccessful()) {
+                        auth.signInWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    isLoading = false;
+                                    openMainActivity(visitor);
 
-                                                            openMainActivity(visitor);
+                                } else {
+                                    isLoading = false;
+                                    String error = "";
+                                    try {
+                                        throw task.getException();
+                                    } catch (FirebaseAuthInvalidUserException e) {
+                                        error = "Usuário inválido. Por favor, verifique";
+                                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                                        error = "Dados inválidos. Por favor, tente novamente!";
 
-                                                        } else {
-                                                            String error = "";
-                                                            try {
-                                                                throw task.getException();
-                                                            } catch (
-                                                                    FirebaseAuthInvalidUserException e) {
-                                                                error = "Usuário inválido. Por favor, verifique";
-                                                            } catch (
-                                                                    FirebaseAuthInvalidCredentialsException e) {
-                                                                error = "Dados inválidos. Por favor, tente novamente!";
-
-                                                            } catch (Exception e) {
-                                                                error = "Erro ao cadastrar usuário: " + e.getMessage();
-                                                            }
-
-                                                            Toast.makeText(LoginActivity.this,
-                                                                    error,
-                                                                    Toast.LENGTH_SHORT).show();
-
-                                                        }
-                                                    }
-                                                });
-
-                                    } else {
-
-                                        String error = "";
-
-                                        try {
-                                            throw task.getException();
-                                        } catch (FirebaseAuthWeakPasswordException e) {
-                                            error = "Digite uma senha mais forte";
-                                        } catch (FirebaseAuthInvalidCredentialsException e) {
-                                            error = "Por favor, digite um e-mail válido!";
-
-                                        } catch (FirebaseAuthUserCollisionException e) {
-                                            error = "Conta já existente!";
-
-                                        } catch (Exception e) {
-                                            error = "Erro ao cadastrar usuário:" + e.getMessage();
-                                        }
-
-                                        Toast.makeText(LoginActivity.this,
-                                                error,
-                                                Toast.LENGTH_SHORT).show();
-
+                                    } catch (Exception e) {
+                                        error = "Erro ao cadastrar usuário: " + e.getMessage();
                                     }
 
-                                }
+                                    Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
 
-                            });
+                                }
+                            }
+                        });
+
+                    } else {
+
+                        String error = "";
+
+                        try {
+                            throw task.getException();
+                        } catch (FirebaseAuthWeakPasswordException e) {
+                            error = "Digite uma senha mais forte";
+                        } catch (FirebaseAuthInvalidCredentialsException e) {
+                            error = "Por favor, digite um e-mail válido!";
+
+                        } catch (FirebaseAuthUserCollisionException e) {
+                            error = "Conta já existente!";
+
+                        } catch (Exception e) {
+                            error = "Erro ao cadastrar usuário:" + e.getMessage();
+                        }
+
+                        Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+
+            });
+            handleLoadingProgressBar();
 
         }
+    }
+
+    private void handleLoadingProgressBar() {
+        if (isLoading) loginProgressBar.setVisibility(View.VISIBLE);
+        else loginProgressBar.setVisibility(View.GONE);
     }
 
     private void createVisitorCredentials() {
@@ -224,5 +223,11 @@ public class LoginActivity extends AppCompatActivity {
         textVisitor = findViewById(R.id.textVisitor);
         loginProgressBar = findViewById(R.id.loginProgressBar);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isLoading = false;
     }
 }
