@@ -1,6 +1,11 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import static com.marcosviniciusferreira.casaflow.R.color;
+import static com.marcosviniciusferreira.casaflow.R.id;
+import static com.marcosviniciusferreira.casaflow.R.layout;
+
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -20,7 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.marcosviniciusferreira.casaflow.R;
 import com.marcosviniciusferreira.casaflow.adapter.AdapterTransactions;
 import com.marcosviniciusferreira.casaflow.config.FirebaseConfig;
 import com.marcosviniciusferreira.casaflow.helper.Base64Custom;
@@ -78,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_main);
+        setContentView(layout.activity_main);
 
         initializeComponents();
         initializeCalendarSettings();
@@ -123,12 +127,20 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setNegativeButton("Não", (dialog, which) -> {
             });
             alertDialog.setPositiveButton("Sim", (dialog, which) -> {
+
                 auth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
 
             });
             AlertDialog alert = alertDialog.create();
+            alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(color.red_uncheck));
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(color.green_check));
+                }
+            });
             alert.show();
 
 
@@ -299,11 +311,11 @@ public class MainActivity extends AppCompatActivity {
         String formattedBalance = decimalFormat.format(totalMonthBalance).replace(".", ",");
 
         if (totalMonthBalance > 0) {
-            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.green_check));
+            monthBalanceValue.setTextColor(this.getResources().getColor(color.green_check));
         } else if (totalMonthBalance < 0) {
-            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.red_uncheck));
+            monthBalanceValue.setTextColor(this.getResources().getColor(color.red_uncheck));
         } else {
-            monthBalanceValue.setTextColor(this.getResources().getColor(R.color.grey));
+            monthBalanceValue.setTextColor(this.getResources().getColor(color.grey));
 
         }
         monthBalance.setText("Total em " + monthToBeShown + ":");
@@ -362,18 +374,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeComponents() {
 
-        welcomeName = findViewById(R.id.textMainWelcome);
-        generalBalance = findViewById(R.id.textGeneralBalance);
-        monthBalance = findViewById(R.id.textMonthBalance);
-        monthBalanceValue = findViewById(R.id.textMonthBalanceValue);
-        buttonExit = findViewById(R.id.buttonExit);
+        welcomeName = findViewById(id.textMainWelcome);
+        generalBalance = findViewById(id.textGeneralBalance);
+        monthBalance = findViewById(id.textMonthBalance);
+        monthBalanceValue = findViewById(id.textMonthBalanceValue);
+        buttonExit = findViewById(id.buttonExit);
 
-        incomeButton = findViewById(R.id.fabAdd);
-        expenseButton = findViewById(R.id.fabRemove);
+        incomeButton = findViewById(id.fabAdd);
+        expenseButton = findViewById(id.fabRemove);
 
-        calendarView = findViewById(R.id.calendarView);
+        calendarView = findViewById(id.calendarView);
 
-        recyclerView = findViewById(R.id.recyclerTransactions);
+        recyclerView = findViewById(id.recyclerTransactions);
 
     }
 
