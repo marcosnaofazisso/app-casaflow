@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,13 +29,17 @@ public class RegisterActivity extends AppCompatActivity {
     private Button buttonRegister;
     private TextInputEditText editName;
     private TextInputEditText editEmail;
+    private TextInputEditText editPhone;
     private TextInputEditText editPassword;
     private TextInputEditText editPasswordConfirmation;
+    private CheckBox checkBoxTerms;
 
     private String name;
     private String email;
+    private String phone;
     private String password;
     private String passwordConfirm;
+    private boolean termIsChecked;
 
     private FirebaseAuth auth;
     private User user;
@@ -56,13 +61,17 @@ public class RegisterActivity extends AppCompatActivity {
     private void fieldValidations() {
         name = editName.getText().toString();
         email = editEmail.getText().toString();
+        phone = editPhone.getText().toString();
         password = editPassword.getText().toString();
         passwordConfirm = editPasswordConfirmation.getText().toString();
+        termIsChecked = checkBoxTerms.isChecked();
 
         if (allFieldsFilled() && passwordsMatches()) {
             user = new User();
             user.setName(name);
             user.setEmail(email);
+            user.setPhone(phone);
+            user.setHasAcceptedTermsOfUse(termIsChecked);
             user.setPassword(password);
 
             registerNewUser();
@@ -82,9 +91,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean allFieldsFilled() {
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() || phone.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_LONG).show();
             return false;
+        } else if (!termIsChecked) {
+            Toast.makeText(this, "É necessário aceitar os Termos de Uso", Toast.LENGTH_LONG).show();
+            return false;
+
         } else {
             return true;
         }
@@ -96,39 +109,35 @@ public class RegisterActivity extends AppCompatActivity {
 
         auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(this,
-                        new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
+                        task -> {
 
-                                if (task.isSuccessful()) {
-                                    String idUser = Base64Custom.codeBase64(user.getEmail());
-                                    user.setId(idUser);
-                                    user.save();
-                                    finish();
+                            if (task.isSuccessful()) {
+                                String idUser = Base64Custom.codeBase64(user.getEmail());
+                                user.setId(idUser);
+                                user.save();
+                                finish();
 
-                                } else {
+                            } else {
 
-                                    String error = "";
+                                String error = "";
 
-                                    try {
-                                        throw task.getException();
-                                    } catch (FirebaseAuthWeakPasswordException e) {
-                                        error = "Digite uma senha mais forte";
-                                    } catch (FirebaseAuthInvalidCredentialsException e) {
-                                        error = "Por favor, digite um e-mail válido!";
+                                try {
+                                    throw task.getException();
+                                } catch (FirebaseAuthWeakPasswordException e) {
+                                    error = "Digite uma senha mais forte";
+                                } catch (FirebaseAuthInvalidCredentialsException e) {
+                                    error = "Por favor, digite um e-mail válido!";
 
-                                    } catch (FirebaseAuthUserCollisionException e) {
-                                        error = "Conta já existente!";
+                                } catch (FirebaseAuthUserCollisionException e) {
+                                    error = "Conta já existente!";
 
-                                    } catch (Exception e) {
-                                        error = "Erro ao cadastrar usuário:" + e.getMessage();
-                                    }
-
-                                    Toast.makeText(RegisterActivity.this,
-                                            error,
-                                            Toast.LENGTH_SHORT).show();
-
+                                } catch (Exception e) {
+                                    error = "Erro ao cadastrar usuário:" + e.getMessage();
                                 }
+
+                                Toast.makeText(RegisterActivity.this,
+                                        error,
+                                        Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -139,7 +148,9 @@ public class RegisterActivity extends AppCompatActivity {
         buttonRegister = findViewById(R.id.buttonRegister);
         editName = findViewById(R.id.editTextName);
         editEmail = findViewById(R.id.editTextEmail);
+        editPhone = findViewById(R.id.editTextPhone);
         editPassword = findViewById(R.id.editTextPassword);
         editPasswordConfirmation = findViewById(R.id.editTextConfirmPassword);
+        checkBoxTerms = findViewById(R.id.checkBoxTermsOfUse);
     }
 }

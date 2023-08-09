@@ -13,7 +13,9 @@ public class User {
     private String id;
     private String name;
     private String email;
+    private String phone;
     private String password;
+    private boolean hasAcceptedTermsOfUse;
 
     private Double totalExpense = 0.0;
     private Double totalIncome = 0.0;
@@ -36,9 +38,6 @@ public class User {
                 .child(this.id)
                 .setValue(this);
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(this);
-        Log.i("USER >>>>>>>>", json);
     }
 
     public String getId() {
@@ -88,5 +87,21 @@ public class User {
 
     public void setTotalIncome(Double totalIncome) {
         this.totalIncome = totalIncome;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isHasAcceptedTermsOfUse() {
+        return hasAcceptedTermsOfUse;
+    }
+
+    public void setHasAcceptedTermsOfUse(boolean hasAcceptedTermsOfUse) {
+        this.hasAcceptedTermsOfUse = hasAcceptedTermsOfUse;
     }
 }
