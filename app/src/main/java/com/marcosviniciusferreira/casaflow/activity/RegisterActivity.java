@@ -3,12 +3,14 @@ package com.marcosviniciusferreira.casaflow.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText editPassword;
     private TextInputEditText editPasswordConfirmation;
     private CheckBox checkBoxTerms;
+    private TextView buttonTermsOfUse;
 
     private String name;
     private String email;
@@ -53,8 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         initializeComponents();
 
-
         buttonRegister.setOnClickListener(v -> fieldValidations());
+
+        buttonTermsOfUse.setOnClickListener(v -> startActivity(new Intent(RegisterActivity.this, TermsOfUseActivity.class)));
 
     }
 
@@ -152,5 +156,6 @@ public class RegisterActivity extends AppCompatActivity {
         editPassword = findViewById(R.id.editTextPassword);
         editPasswordConfirmation = findViewById(R.id.editTextConfirmPassword);
         checkBoxTerms = findViewById(R.id.checkBoxTermsOfUse);
+        buttonTermsOfUse = findViewById(R.id.buttonTermsOfUse);
     }
 }
