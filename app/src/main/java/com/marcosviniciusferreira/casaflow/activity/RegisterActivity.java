@@ -3,7 +3,10 @@ package com.marcosviniciusferreira.casaflow.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -58,7 +61,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         buttonRegister.setOnClickListener(v -> fieldValidations());
 
-        buttonTermsOfUse.setOnClickListener(v -> startActivity(new Intent(RegisterActivity.this, TermsOfUseActivity.class)));
+        buttonTermsOfUse.setOnClickListener(v -> {
+            startActivity(new Intent(RegisterActivity.this, TermsOfUseActivity.class));
+        });
 
     }
 
