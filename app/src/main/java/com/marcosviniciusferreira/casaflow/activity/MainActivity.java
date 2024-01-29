@@ -1,5 +1,6 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 import static com.marcosviniciusferreira.casaflow.R.color;
 import static com.marcosviniciusferreira.casaflow.R.id;
 import static com.marcosviniciusferreira.casaflow.R.layout;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(layout.activity_main);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+
 
         initializeComponents();
         initializeCalendarSettings();
