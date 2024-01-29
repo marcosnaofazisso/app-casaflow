@@ -1,5 +1,7 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,6 +18,8 @@ public class TermsOfUseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms_of_use);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+
         getSupportActionBar().setTitle("CasaFlow - Termos de Uso");
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -24,9 +28,9 @@ public class TermsOfUseActivity extends AppCompatActivity {
         buttonReadTerms.setOnClickListener(v -> {
             Intent i = new Intent(TermsOfUseActivity.this, RegisterActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            i.putExtra("churros", 2);
-            i.putExtra("marcos", "aaaaaa");
+            i.putExtra("termsAccepted", true);
             startActivity(i);
+            finish();
         });
     }
 }

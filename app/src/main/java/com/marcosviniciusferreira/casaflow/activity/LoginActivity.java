@@ -1,5 +1,7 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -51,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+
 
         getSupportActionBar().hide();
 
@@ -72,9 +76,9 @@ public class LoginActivity extends AppCompatActivity {
         textVisitor.setOnClickListener(v -> {
             isLoading = true;
             signIn(true);
-
-
         });
+
+        textVisitor.setVisibility(View.GONE);
     }
 
     private void signIn(Boolean visitor) {

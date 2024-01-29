@@ -55,8 +55,8 @@
         android:onClick="startRegistering"
         android:text="Criar nova conta"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,4 +78,26 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonIntroRegister" />
+
+    <Button
+        android:id="@+id/buttonVisitor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/ic_launcher_casaflow_background"
+        android:backgroundTint="@color/ic_launcher_casaflow_background"
+        android:onClick="visitorLogin"
+        android:text="Entrar como Visitante"
+        android:textColor="@color/purple_600"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAlreadyRegistered"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

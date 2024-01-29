@@ -1,5 +1,7 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.pm.PackageInfoCompat;
@@ -25,6 +27,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         TextView textAppVersion = findViewById(R.id.textAppVersion);
 
@@ -47,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         long versionNumber = PackageInfoCompat.getLongVersionCode(packageInfo);
-        textAppVersion.setText("Version: " + Double.parseDouble(String.valueOf(versionNumber)));
+        textAppVersion.setText("Version: 0." + Double.parseDouble(String.valueOf(versionNumber)));
         textAppVersion.setTextColor(R.color.purple_700);
 
         Window window = this.getWindow();

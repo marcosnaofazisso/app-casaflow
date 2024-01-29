@@ -1,5 +1,7 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         getSupportActionBar().hide();
 
@@ -124,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 String idUser = Base64Custom.codeBase64(user.getEmail());
                                 user.setId(idUser);
                                 user.save();
+                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                                 finish();
 
                             } else {
