@@ -4,12 +4,14 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -60,8 +62,25 @@ public class RegisterActivity extends AppCompatActivity {
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         getSupportActionBar().hide();
-
         initializeComponents();
+
+        // Check for Dark Mode
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isDarkMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+
+        if (isDarkMode) {
+            editName.setBackgroundColor(getResources().getColor(R.color.purple_200));
+            editEmail.setBackgroundColor(getResources().getColor(R.color.purple_200));
+            editPhone.setBackgroundColor(getResources().getColor(R.color.purple_200));
+            editPassword.setBackgroundColor(getResources().getColor(R.color.purple_200));
+            editPasswordConfirmation.setBackgroundColor(getResources().getColor(R.color.purple_200));
+
+            editName.setHintTextColor(getResources().getColor(R.color.white));
+            editEmail.setHintTextColor(getResources().getColor(R.color.white));
+            editPhone.setHintTextColor(getResources().getColor(R.color.white));
+            editPassword.setHintTextColor(getResources().getColor(R.color.white));
+            editPasswordConfirmation.setHintTextColor(getResources().getColor(R.color.white));
+        }
 
         buttonRegister.setOnClickListener(v -> fieldValidations());
 
@@ -167,5 +186,6 @@ public class RegisterActivity extends AppCompatActivity {
         editPasswordConfirmation = findViewById(R.id.editTextConfirmPassword);
         checkBoxTerms = findViewById(R.id.checkBoxTermsOfUse);
         buttonTermsOfUse = findViewById(R.id.buttonTermsOfUse);
+
     }
 }

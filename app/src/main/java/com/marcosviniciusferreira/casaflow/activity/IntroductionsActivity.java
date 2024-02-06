@@ -1,5 +1,7 @@
 package com.marcosviniciusferreira.casaflow.activity;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -42,6 +44,8 @@ public class IntroductionsActivity extends com.heinrichreimersoftware.materialin
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         buttonAlreadyRegistered = findViewById(R.id.buttonAlreadyRegistered);
         buttonIntroRegister = findViewById(R.id.buttonIntroRegister);

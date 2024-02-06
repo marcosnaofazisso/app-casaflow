@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -36,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button buttonEnter;
     private TextInputEditText textEmail;
+
     private TextInputEditText textPassword;
     private TextView textRegister;
     private TextView textVisitor;
@@ -55,10 +58,24 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
-
         getSupportActionBar().hide();
-
         initComponents();
+
+        // Check for Dark Mode
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isDarkMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+
+        if (isDarkMode) {
+            textEmail.setBackgroundColor(getResources().getColor(R.color.purple_200));
+            textPassword.setBackgroundColor(getResources().getColor(R.color.purple_200));
+
+            textEmail.setHintTextColor(getResources().getColor(R.color.purple_500));
+            textPassword.setHintTextColor(getResources().getColor(R.color.purple_500));
+        } else {
+            textEmail.setBackgroundColor(getResources().getColor(R.color.casaflow));
+            textPassword.setBackgroundColor(getResources().getColor(R.color.casaflow));
+
+        }
 
         buttonEnter.setOnClickListener(v -> {
             isLoading = true;

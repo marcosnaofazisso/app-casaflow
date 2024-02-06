@@ -36,7 +36,7 @@
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/textInputEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -44,7 +44,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         app:hintTextColor="@color/red_uncheck"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/textInputPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,13 +56,12 @@
             android:id="@+id/editExpenseDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/casaflow"
             android:hint="Data "
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
+        android:id="@+id/textInputPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -74,13 +73,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/textInputEmail">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editExpenseCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/casaflow"
             android:hint="Categoria" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,13 +95,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/textInputPassword">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editExpenseDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/casaflow"
             android:hint="Descrição" />
     </com.google.android.material.textfield.TextInputLayout>
 
