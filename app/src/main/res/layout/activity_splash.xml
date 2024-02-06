@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FCFCFC"
+    android:backgroundTint="@color/casaflow"
     android:foregroundTint="#F5F5F5"
     tools:context=".activity.SplashActivity">
 

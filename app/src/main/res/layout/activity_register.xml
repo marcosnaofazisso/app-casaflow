@@ -7,12 +7,15 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    app:layout_constraintTop_toTopOf="parent"
+    android:backgroundTint="@color/casaflow">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/registerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.RegisterActivity">
+        tools:context=".activity.RegisterActivity"
+        android:background="@color/casaflow">
 
         <ImageView
             android:id="@+id/imageRegisterLogo"
@@ -61,7 +64,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/casaflow"
-                android:hint="Nome" />
+                android:hint="Nome"
+                android:textColor="@color/purple_500"
+                android:textColorHint="@color/purple_500"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -79,7 +85,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/casaflow"
                 android:hint="Telefone"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:textColor="@color/purple_500"
+                android:textColorHint="@color/purple_500"
+                android:textColorLink="@color/purple_500" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -99,7 +108,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/casaflow"
                 android:hint="Email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textColor="@color/purple_500"
+                android:textColorHint="@color/purple_500"
+                android:textColorLink="@color/purple_500" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -119,7 +131,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/casaflow"
-                android:hint="Senha" />
+                android:hint="Senha"
+                android:textColor="@color/purple_500"
+                android:textColorHint="@color/purple_500"
+                android:textColorLink="@color/purple_500" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -139,7 +154,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/casaflow"
-                android:hint="Confirme sua senha" />
+                android:hint="Confirme sua senha"
+                android:textColor="@color/purple_500"
+                android:textColorHint="@color/purple_500"
+                android:textColorLink="@color/purple_500" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -165,6 +183,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="Concordo com os Termos de Uso"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -181,6 +200,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="Termos de Uso"
+            android:textColor="@color/purple_500"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
